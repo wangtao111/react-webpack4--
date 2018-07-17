@@ -13,8 +13,8 @@ module.exports = {
         ]
     },
     output: {
-        filename: '[name].[hash:8].js',
-        chunkFilename: 'chunk.[id].[hash:8].js',
+        filename: 'js/[name].[hash:8].js',
+        // chunkFilename: 'dist/chunk.[id].[hash:8].js',
         path: path.join(__dirname, './dist')
     },
     module: {
@@ -23,36 +23,40 @@ module.exports = {
                 test: /\.less$/,
                 loader: 'style-loader!css-loader!less-loader'
             },
-            {
-                test: /.css$/,
-                use: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader'})
-            }, /*解析css, 并把css变成文件通过link标签引入*/
-            {
-                test: /\.bundle\.js$/,
-                use: {
-                    loader: 'bundle-loader',
-                    options: {
-                        name: '[name]',
-                        lazy: true
-                    }
-                }
-            },
-            {
-                test: /\.js$/,
+            {//CSS处理
+                test: /\.css$/,
+                loader: "style-loader!css-loader?modules",
                 exclude: /node_modules/,
-                loader: 'babel-loader'
             },
+            {//antd样式处理
+                test:/\.css$/,
+                exclude:/src/,
+                use:[
+                    { loader: "style-loader",},
+                    {
+                        loader: "css-loader",
+                        options:{
+                            importLoaders:1
+                        }
+                    }
+                ]
+            },
+            // {
+            //     test: /\.js$/,
+            //     exclude: /node_modules/,
+            //     loader: 'babel-loader'
+            // },
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
                         presets: ['es2015', 'react', "stage-0"],
                         plugins: [
+                            ['import', {libraryName: "antd", style: "css"}],
                             ['react-hot-loader/babel'],
-                            ["transform-class-properties"],
-                            ['import', {"libraryName": "antd", "style": "css"}]
+                            ["transform-class-properties"]
                         ]
                     }
                 }
@@ -62,7 +66,7 @@ module.exports = {
                 loader: 'url-loader',
                 query: {
                     limit: 10000,
-                    name: '[name].[ext]'
+                    name: 'img/[name].[ext]'
                 }
             },
             {
@@ -70,21 +74,14 @@ module.exports = {
                 loader: 'url-loader',
                 query: {
                     limit: 10000,
-                    name: '[name].[hash:7].[ext]'
+                    name: 'img/[name].[ext]'
                 }
             }
         ],
     },
-    resolve: {
-        alias: {
-        }
-    },
     performance: {
-
         hints: "warning", // 枚举
-
         maxAssetSize: 300000, // 整数类型（以字节为单位）
-
         maxEntrypointSize: 500000, // 整数类型（以字节为单位）
     },
     optimization: {
@@ -118,7 +115,7 @@ module.exports = {
             filename:'index.html'
         }),
         new ExtractTextPlugin({
-            filename: 'styles.[hash:8].css'
+            filename: 'css/styles.[hash:8].css'
         }),
         new CleanWebpackPlugin(['dist'],
             {

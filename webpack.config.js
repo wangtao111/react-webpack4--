@@ -21,38 +21,40 @@ module.exports = {
               test: /\.less$/,
               loader: 'style-loader!css-loader!less-loader'
           },
-          {
+          {//CSS处理
+              test: /\.css$/,
+              loader: "style-loader!css-loader?modules",
+              exclude: /node_modules/,
+          },
+          {//antd样式处理
               test:/\.css$/,
-              use: ExtractTextPlugin.extract({
-                  use:'css-loader'
-              })//不再需要style-loader
-           },
+              exclude:/src/,
+              use:[
+                  { loader: "style-loader",},
+                  {
+                      loader: "css-loader",
+                      options:{
+                          importLoaders:1
+                      }
+                  }
+              ]
+          },
           // {
-          //     test: /\.bundle\.js$/,
-          //     use: {
-          //         loader: 'bundle-loader',
-          //         options: {
-          //             name: '[name]',
-          //             lazy: true
-          //         }
-          //     }
+          //     test: /\.js$/,
+          //     exclude: /node_modules/,
+          //     loader: 'babel-loader'
           // },
           {
-              test: /\.js$/,
-              exclude: /node_modules/,
-              loader: 'babel-loader'
-          },
-          {
-              test: /\.js$/,
+              test: /\.(js|jsx)$/,
               exclude: /node_modules/,
               use: {
                   loader: 'babel-loader',
                   options: {
                       presets: ['es2015', 'react', "stage-0"],
                       plugins: [
+                          ['import', {libraryName: "antd", style: "css"}],
                           ['react-hot-loader/babel'],
-                          ["transform-class-properties"],
-                          ['import', {"libraryName": "antd", "style": "css"}]
+                          ["transform-class-properties"]
                       ]
                   }
               }
@@ -82,7 +84,7 @@ module.exports = {
           filename:'index.html'
       }),
       new ExtractTextPlugin({
-          filename: 'styles.[hash:8].css'
+          filename: 'css/styles.[hash:8].css'
       }),
       new OpenBrowserPlugin({
           url: `http://localhost:2000`,
