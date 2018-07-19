@@ -15,11 +15,11 @@ export default class App extends React.Component {
         return (
             <Router history={browserHistory}>
                 <div>
-                    <ul>
-                        <li><Link to="/home">Home2</Link></li>
-                        <li><Link to="/topics">Topicssad</Link></li>
-                        <li><Link to="/counter">Counter</Link></li>
-                    </ul>
+                    {/*<ul>*/}
+                        {/*<li><Link to="/home">Home2</Link></li>*/}
+                        {/*<li><Link to="/topics">Topicssad</Link></li>*/}
+                        {/*<li><Link to="/counter">Counter</Link></li>*/}
+                    {/*</ul>*/}
                     <hr/>
                     <Route exact  path="/" render={()=>
                         <Redirect to="/home"/>

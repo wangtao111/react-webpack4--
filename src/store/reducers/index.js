@@ -7,7 +7,7 @@ import {
 
 export let initialState = {
     entities: {
-        loginUser: null
+        loginUser: 454545
     },
     loginPageData: {
         loading: false,
@@ -27,6 +27,7 @@ let reducers = combineReducers({
     loginPageData: function(state = {}, action) {
         switch(action.type) {
             case LOGIN_LOADING:
+                console.log(888, {...state, loading: action.payload});
                 return {...state, loading: action.payload};
             case LOGIN_FAILURE:
                 return {...state, error: action.payload};

@@ -4,13 +4,6 @@ import React from 'react';
 // import { createLogger } from 'redux-logger';
 // import DevTools from '../DevTools'; // 辅助工具
 import reducers, { initialState } from './reducers';
-let enhancer = applyMiddleware(thunk);
-// if (process.env.NODE_ENV === 'development') {
-//     enhancer = compose(
-//         applyMiddleware(thunk, createLogger()),
-//         DevTools.instrument()
-//     )
-// }
 
 let store = createStore(
     reducers,

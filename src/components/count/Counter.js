@@ -1,8 +1,10 @@
 import React from 'react';
-
+import {connect} from 'react-redux';
+import './Counter.less'
+import {LOGIN_LOADING} from "../../store/actions";
 const COUNT_STEP = 10;
 
-export default class Counter extends React.Component {
+class Counter extends React.Component {
 
   constructor(props) {
     super(props);
@@ -11,6 +13,7 @@ export default class Counter extends React.Component {
 
   componentDidMount() {
     this.timeout = setTimeout(this.handleTimeoutEvent.bind(this), 1000);
+    console.log(1212, this.props.entities);
   }
 
   componentWillUnmount() {
@@ -24,10 +27,28 @@ export default class Counter extends React.Component {
   }
 
   render() {
+    const {entities, loginPageData} = this.props;
     return (
       <div>
-        <p> This is a ct112er1: {this.state.value} </p>
+        <p className='sss'> This is a ct112er1: {this.state.value} </p>
+        <div onClick={loginPageData}>
+            {entities.loginUser}
+        </div>
       </div>
     );
   }
 }
+function mapStateToProps(state) {
+    return{
+        entities: state.entities
+    }
+}
+function mapDispatchToProps(dispatch, ownProps) {
+    return {
+        loginPageData: () => dispatch({
+            type: 'LOGIN_LOADING',
+            payload: 'LOGIN_LOADING'
+        }),
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Counter)
